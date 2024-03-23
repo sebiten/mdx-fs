@@ -5,6 +5,9 @@ import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { createBrowserClient } from "@supabase/ssr";
 import { usePathname } from "next/navigation";
+import { LogOutIcon } from "lucide-react";
+import { handleLogOut } from "@/app/actions";
+import { SubmitButton } from "../ui/submit-button";
 
 interface ILoginFormProps {}
 
@@ -15,7 +18,8 @@ export default function LoginForm() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  const handleLogin = () => {
+  const handleLogin = (e: any) => {
+    e.preventDefault();
     supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -25,7 +29,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div>
+    <form className="flex gap-2 ">
       <Button
         variant="outline"
         className="flex items-center gap-2"
@@ -34,6 +38,15 @@ export default function LoginForm() {
         <FcGoogle />
         Login
       </Button>
-    </div>
+      <SubmitButton
+        pendingText="Loggin out..."
+        variant="outline"
+        className="flex items-center gap-2"
+        formAction={handleLogOut}
+      >
+        <LogOutIcon />
+        LogOut
+      </SubmitButton>
+    </form>
   );
 }
